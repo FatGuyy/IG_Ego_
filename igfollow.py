@@ -2,11 +2,12 @@ from lib2to3.pgen2.driver import Driver
 from logging import exception
 import time
 import os 
-import random
+from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 try:
@@ -48,30 +49,27 @@ try:
     followers_button.click()
     
     #Gets the name of follower
-    #Xpath for the names = /html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div
-    #follower = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[1]/div/div[2]/div[1]/div/div/span')
-    #print(follower.text)
-    time.sleep(4)
-    
-
-
+  
     print('Till here')
-    element = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]')
+    fBody  = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]')
+    scroll = 0
+    while scroll < 10: # scroll 5 times
+        driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', fBody)
+        time.sleep(2)
+        scroll += 1
+
+    #Xpath for the names = /html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div
+    
+    followers = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div')
+
+    for i in range(1,(followers_count+1)):
+        X_path = str(f'/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[{i}]/div/div[2]/div[1]/div/div/span/a')
+        follower = driver.find_element_by_xpath(X_path)
+        print(follower.text)
+        #time.sleep(1)
+    
+    
     print('Till loop')
-    FList = driver.find_element_by_css_selector('div[role=\'dialog\'] ul')
-    numberOfFollowersInList = len(FList.find_elements_by_css_selector('li'))
-
-    FList.click()
-    actionChain = webdriver.ActionChains(driver)
-    time.sleep(random.randint(2,4))
-
-    while (numberOfFollowersInList < max()):
-        actionChain.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()        
-        numberOfFollowersInList = len(FList.find_elements_by_css_selector('li'))
-        time.sleep(0.4)
-        print(numberOfFollowersInList)
-        actionChain.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()            
-        time.sleep(1)
     #laughing__soul__
     
 

@@ -10,12 +10,14 @@ webdriver.get('https://www.instagram.com/accounts/login/?source=auth_switcher')
 sleep(3)
 
 username = webdriver.find_element_by_name('username')
-username.send_keys(input('Username: '))
+username.send_keys(input('Username'))
 
 password = webdriver.find_element_by_name('password')
-password.send_keys(input('Password:'))
+password.send_keys(input('Password :'))
 
 #instead of searching for the Button (Log In) you can simply press enter when you already selected the password 
 #or the username input element.
 submit = webdriver.find_element_by_tag_name('form')
 submit.submit()
+
+chromedriver_path1 = r"/singles/chromedriver.chromediver.exe"

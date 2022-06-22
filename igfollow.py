@@ -2,16 +2,20 @@ from lib2to3.pgen2.driver import Driver
 from logging import exception
 import time
 import os 
+import random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 try:
-    chrome_options = Options()
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    driver = webdriver.Chrome(options=chrome_options)
+    os.environ['PATH'] += r'.\chromedriver.chromedriver.exe'
+    #chrome_options = Options()
+    #chrome_options.add_argument('--no-sandbox')
+    #chrome_options.add_argument('--disable-dev-shm-usage')
+    #driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome()
     try:
         driver.get('https://www.instagram.com/accounts/login/?source=auth_switcher')
         driver.implicitly_wait(10)
@@ -48,14 +52,26 @@ try:
     #follower = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[1]/div/div[2]/div[1]/div/div/span')
     #print(follower.text)
     time.sleep(4)
-    #driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+    
 
 
     print('Till here')
     element = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]')
     print('Till loop')
-    element = driver.find_element_by_xpath("/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[100]")
-    driver.execute_script("return arguments[0].scrollIntoView();", element)
+    FList = driver.find_element_by_css_selector('div[role=\'dialog\'] ul')
+    numberOfFollowersInList = len(FList.find_elements_by_css_selector('li'))
+
+    FList.click()
+    actionChain = webdriver.ActionChains(driver)
+    time.sleep(random.randint(2,4))
+
+    while (numberOfFollowersInList < max()):
+        actionChain.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()        
+        numberOfFollowersInList = len(FList.find_elements_by_css_selector('li'))
+        time.sleep(0.4)
+        print(numberOfFollowersInList)
+        actionChain.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()            
+        time.sleep(1)
     #laughing__soul__
     
 

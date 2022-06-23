@@ -47,8 +47,9 @@ try:
     followers_count = int(followers_count.text)
     followers_button = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[2]/a/div')
     followers_button.click()
-  
     print('Till here')
+
+    #scroll The followers tab
     fBody  = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]')
     scroll = 0
     while scroll < (followers_count*0.209): #This may vary as per your connection.
@@ -76,15 +77,38 @@ try:
     
     print('Till loop')
 
-    #click the cross to close followers tab
-
+    #click the cross to close followers tab + get the following_count
+    close_followers_popup = driver.find_element(by=By.XPATH, value='/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[1]/div/div[3]/div/button')
+    close_followers_popup.click()
+    time.sleep(4)
+    following_count = int(driver.find_element(by=By.XPATH, value='/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[3]/a/div/span').text)
+    print(following_count)
 
     #Open following
+    following_button = driver.find_element(by=By.XPATH, value='/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[3]')
+    following_button.click()
 
     #Scroll The following popup
+    fBody2  = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[3]')
+    scroll = 0
+    while scroll < (following_count*0.209): #This may vary as per your connection.
+        driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', fBody2)
+        time.sleep(2)
+        scroll += 1
+    print('Done with scrolling')
 
     #Append in the list
-
+    following_list = []
+    for i in range(1,(following_count+1)):
+        x_path = str(f'/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[3]/ul/div/li[{i}]/div/div[2]/div[1]/div/div/span/a/span')
+        #sum += 1
+        try :
+            following = driver.find_element(by=By.XPATH, value=x_path)
+            following_list.append(following.text)
+        except:
+            continue
+        driver.implicitly_wait(1)
+    print(following_list)
     
     #Compare followers and following,store in a list
 

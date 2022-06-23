@@ -47,32 +47,54 @@ try:
     followers_count = int(followers_count.text)
     followers_button = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[2]/a/div')
     followers_button.click()
-    
-    #Gets the name of follower
   
     print('Till here')
     fBody  = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]')
     scroll = 0
-    while scroll < 10: # scroll 5 times
+    while scroll < (followers_count*0.209): #This may vary as per your connection.
         driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', fBody)
         time.sleep(2)
         scroll += 1
-
-    #Xpath for the names = /html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div
     
     followers = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div')
-
-    for i in range(1,(followers_count+1)):
-        X_path = str(f'/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[{i}]/div/div[2]/div[1]/div/div/span/a')
-        follower = driver.find_element_by_xpath(X_path)
-        print(follower.text)
-        #time.sleep(1)
+    #Gets the name of follower
+    print('hello There.')
     
+    sum = 0
+    followers_list = []
+    for i in range(1,(followers_count+1)):
+        x_path = str(f'/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[{i}]/div/div[1]/div[2]/div[1]/span/a/span')
+        sum += 1
+        try :
+            follower = driver.find_element(by=By.XPATH, value=x_path)
+            followers_list.append(follower.text)
+        except:
+            continue
+        driver.implicitly_wait(1)
+    print(followers_list)
+    print(sum)
     
     print('Till loop')
+
+    #click the cross to close followers tab
+
+
+    #Open following
+
+    #Scroll The following popup
+
+    #Append in the list
+
+    
+    #Compare followers and following,store in a list
+
+
+    #store the list in excel
+
+
     #laughing__soul__
     
 
 finally:
-    time.sleep(10)
-    driver.close()
+    time.sleep(3)
+    driver.quit()

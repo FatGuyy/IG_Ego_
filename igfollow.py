@@ -11,6 +11,15 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
+#Put your username and password here
+#---------------------------------------
+username = ""
+password = ""
+#---------------------------------------
+
+
+
 def button_click(xpath):
     button = driver.find_element(by=By.XPATH, value=xpath)
     button.click()
@@ -32,9 +41,9 @@ while dont_restart != True:
             driver.implicitly_wait(10)
 
             username = driver.find_element_by_name('username')
-            username.send_keys('fatguy139')
+            username.send_keys(username)
             password = driver.find_element_by_name('password')
-            password.send_keys('FatGuy@139')
+            password.send_keys(password)
             #click login buttom
             button_click('/html/body/div[1]/section/main/div/div/div[1]/div[2]/form/div/div[3]/button')
             #print('3')
@@ -46,7 +55,7 @@ while dont_restart != True:
             driver.implicitly_wait(10)
             #/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input
             search = driver.find_element(by=By.XPATH,  value='/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input')
-            search.send_keys('laughing__soul__')
+            search.send_keys(username)
         except:
             print("Couldn't search.")
         
@@ -146,9 +155,6 @@ while dont_restart != True:
         wb = load_workbook('Non_followers.xlsx')
         sheet = wb.active
         sheet.append(not_following)
-
-        #laughing__soul__
-        
 
     finally:
         time.sleep(3)

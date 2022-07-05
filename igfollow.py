@@ -1,3 +1,4 @@
+from ast import Global
 from re import T
 from openpyxl import workbook, load_workbook
 from logging import exception
@@ -10,6 +11,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+def button_click(xpath):
+    button = driver.find_element(by=By.XPATH, value=xpath)
+    button.click()
 
 def not_following_back(followers_list,following_list):
     return list(set(following_list)- set(followers_list))
@@ -31,9 +35,8 @@ while dont_restart != True:
             username.send_keys('fatguy139')
             password = driver.find_element_by_name('password')
             password.send_keys('FatGuy@139')
-            #print('2')
-            submit = driver.find_element_by_xpath('/html/body/div[1]/section/main/div/div/div[1]/div[2]/form/div/div[3]/button')
-            submit.click()
+            #click login buttom
+            button_click('/html/body/div[1]/section/main/div/div/div[1]/div[2]/form/div/div[3]/button')
             #print('3')
         except exception as e:
             print('Unable to login.')
@@ -41,20 +44,21 @@ while dont_restart != True:
         
         try:
             driver.implicitly_wait(10)
-            search = driver.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input')
+            #/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input
+            search = driver.find_element(by=By.XPATH,  value='/html/body/div[1]/section/nav/div[2]/div/div/div[2]/input')
             search.send_keys('laughing__soul__')
         except:
             print("Couldn't search.")
         
-        profile = driver.find_element_by_xpath('/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div[3]/div/div[2]/div/div[1]/a')
-        profile.click()
+        #click first profile
+        button_click('/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div[3]/div/div[2]/div/div[1]/a')
         
         followers_count = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[2]/a/div/span')
         followers_count = int(followers_count.text)
-        followers_button = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[2]/a/div')
-        followers_button.click()
-        #print('Till here')
-
+        
+        #click followers button
+        button_click('/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[2]/a/div')
+        
         #scroll The followers tab
         fBody  = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]')
         scroll = 0
@@ -62,8 +66,8 @@ while dont_restart != True:
             driver.execute_script('arguments[0].scrollTop = arguments[0].scrollTop + arguments[0].offsetHeight;', fBody)
             time.sleep(2) #Increase this sleep if your connection is slow
             scroll += 1
-        
         followers = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div')
+        
         #Gets the name of follower
         print('Getting the followers list...')
         
@@ -84,15 +88,14 @@ while dont_restart != True:
         print('Working on following...')
 
         #click the cross to close followers tab + get the following_count
-        close_followers_popup = driver.find_element(by=By.XPATH, value='/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[1]/div/div[3]/div/button')
-        close_followers_popup.click()
+        button_click('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[1]/div/div[3]/div/button')
         time.sleep(4)
         following_count = int(driver.find_element(by=By.XPATH, value='/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[3]/a/div/span').text)
         #print(following_count)
 
         #Open following
-        following_button = driver.find_element(by=By.XPATH, value='/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[3]')
-        following_button.click()
+        #clicking following button
+        button_click('/html/body/div[1]/div/div[1]/div/div[1]/div/div/div[1]/div[1]/section/main/div/header/section/ul/li[3]')
 
         #Scroll The following popup
         fBody2  = driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[3]')
@@ -143,10 +146,9 @@ while dont_restart != True:
 
 
         #store the list in excel
-        #ws = load_workbook('Non_followers.xlsx')
-        #sheet = ws.active
-
-
+        wb = load_workbook('Non_followers.xlsx')
+        sheet = wb.active
+        sheet.append(not_following)
 
         #laughing__soul__
         

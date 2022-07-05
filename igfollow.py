@@ -71,11 +71,9 @@ while dont_restart != True:
         #Gets the name of follower
         print('Getting the followers list...')
         
-        #sum = 0
         followers_list = []
         for i in range(1,(followers_count+1)):
             x_path = str(f'/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div/div/div/div[2]/ul/div/li[{i}]/div/div[1]/div[2]/div[1]/span/a/span')
-            #sum += 1
             try :
                 follower = driver.find_element(by=By.XPATH, value=x_path)
                 followers_list.append(follower.text)
@@ -83,7 +81,6 @@ while dont_restart != True:
                 continue
             driver.implicitly_wait(1)
         print(followers_list)
-        #print(sum)
         
         print('Working on following...')
 
